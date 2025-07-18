@@ -95,6 +95,30 @@ sections.Section1:AddToggle({
     end
 })
 
+-- Flashstep Speed Control
+sections.Section1:AddText({
+    enabled = true,
+    text = "Flashstep Speed",
+    flag = "Flashstep_Speed_Label",
+    risky = false,
+})
+
+sections.Section1:AddSlider({
+    text = "Flashstep Speed Slider",
+    flag = 'Flashstep_Slider',
+    suffix = "",
+    value = 100,
+    min = 50,
+    max = 250,
+    increment = 1,
+    tooltip = "Adjust Flashstep Speed",
+    risky = false,
+    callback = function(v)
+        getgenv().FlashstepSpeed = v
+        print("Flashstep Speed set to: " .. v)
+    end
+})
+
 sections.Section1:AddButton({
     enabled = true,
     text = "Button1",
