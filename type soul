@@ -95,29 +95,59 @@ sections.Section1:AddToggle({
     end
 })
 
--- Flashstep Speed Control
-sections.Section1:AddText({
+local flashstepConn
+local plr = game.Players.LocalPlayer
+
+local function setupFlashstep()
+    if flashstepConn then flashstepConn:Disconnect() end
+    local char = plr.Character or plr.CharacterAdded:Wait()
+    local humanoid = char:WaitForChild("Humanoid")
+    local myEntity = workspace:WaitForChild("Entities"):WaitForChild(plr.Name)
+
+    flashstepConn = myEntity:GetAttributeChangedSignal("CurrentState"):Connect(function()
+        if library.flags["Flashstep_Speed"] then
+            local state = myEntity:GetAttribute("CurrentState")
+            if state == "Flashstep" then
+                local speed = library.flags["Flashstep_Slider"] or 100
+                humanoid.WalkSpeed = speed
+            end
+        end
+    end)
+end
+
+-- Set up on load
+setupFlashstep()
+-- Set up on respawn
+plr.CharacterAdded:Connect(function()
+    task.wait(1)
+    setupFlashstep()
+end)
+
+-- UI
+sections.Section1:AddToggle({
     enabled = true,
     text = "Flashstep Speed",
-    flag = "Flashstep_Speed_Label",
-    risky = false,
+    flag = "Flashstep_Speed",
+    tooltip = "Enables Flashstep Speed Control",
+    risky = true,
+    callback = function() end
 })
 
 sections.Section1:AddSlider({
     text = "Flashstep Speed Slider",
-    flag = 'Flashstep_Slider',
+    flag = "Flashstep_Slider",
     suffix = "",
     value = 100,
     min = 50,
-    max = 250,
+    max = 300,
     increment = 1,
-    tooltip = "Adjust Flashstep Speed",
+    tooltip = "Set WalkSpeed during Flashstep",
     risky = false,
     callback = function(v)
-        getgenv().FlashstepSpeed = v
-        print("Flashstep Speed set to: " .. v)
+        print("Flashstep speed set to:", v)
     end
 })
+
 
 sections.Section1:AddButton({
     enabled = true,
