@@ -56,6 +56,22 @@ sections.Section1:AddSeparator({
 	text = "Separator"
 })
 
+sections.Section1:AddButton({
+	enabled = true,
+	text = "Button1",
+	flag = "Button_1",
+	tooltip = "Tooltip1",
+	risky = false,
+	confirm = false, -- shows confirm button
+	callback = function(v)
+	    print(v)
+	end
+})
+
+sections.Section1:AddSeparator({
+	text = "Separator"
+})
+
 sections.Section1:AddSlider({
 	text = "Slider", 
 	flag = 'Slider_1', 
