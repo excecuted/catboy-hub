@@ -65,6 +65,9 @@ sections.Section1:AddToggle({
                 if state == "Flashstep" then
                     print("Flashstep → No WalkSpeed change")
                     return
+                elseif state == "Skill" then
+                    print("Skill → No WalkSpeed change")
+                    return
                 elseif state == "Sprinting" then
                     humanoid.WalkSpeed = 25
                     print("Sprinting → WalkSpeed = 25")
