@@ -64,8 +64,19 @@ sections.Section1:AddButton({
 	risky = false,
 	confirm = false, -- shows confirm button
 	callback = function(v)
-	    print(v)
-	end
+	    local part = workspace:FindFirstChild("Heal Bankai Bar")
+        if part then
+            local clickDetector = part:FindFirstChildOfClass("ClickDetector")
+            if clickDetector then
+                fireclickdetector(clickDetector)
+                print("Clicked Heal Bankai Bar.")
+            else
+                warn("No ClickDetector found in Heal Bankai Bar.")
+            end
+        else
+            warn("Heal Bankai Bar not found in Workspace.")
+        end
+    end
 })
 
 sections.Section1:AddSeparator({
