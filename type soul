@@ -58,9 +58,9 @@ sections.Section1:AddSeparator({
 
 sections.Section1:AddButton({
 	enabled = true,
-	text = "Button1",
-	flag = "Button_1",
-	tooltip = "Tooltip1",
+	text = "Full Mode Bar [TSBG]",
+	flag = "Mode_Bar",
+	tooltip = "gives you full mode bar [TSBG ONLY]",
 	risky = false,
 	confirm = false, -- shows confirm button
 	callback = function(v)
