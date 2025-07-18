@@ -7,7 +7,7 @@ getgenv().luaguardvars = {
 	DiscordName = "cashfears",
 }
 
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/excecuted/catboy-hub/refs/heads/main/source?token=GHSAT0AAAAAADHSV5CAGNUNPTQ2U2IFDTAW2D2BFWQ"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/excecuted/catboy-hub/refs/heads/main/source"))()
 
 library:init() -- Initalizes Library Do Not Delete This
 
