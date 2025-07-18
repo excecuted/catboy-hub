@@ -1,143 +1,125 @@
+
 getgenv().Config = {
-	Invite = "discord.gg/Bg2afYsD",
-	Version = "0.0",
+    Invite = "discord.gg/Bg2afYsD",
+    Version = "0.0",
 }
 
 getgenv().luaguardvars = {
-	DiscordName = "cashfears",
+    DiscordName = "cashfears",
 }
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/excecuted/catboy-hub/refs/heads/main/source"))()
-
-library:init() -- Initalizes Library Do Not Delete This
+library:init()
 
 local Window = library.NewWindow({
-	title = "catboy hub :3",
-	size = UDim2.new(0, 525, 0, 650)
+    title = "catboy hub :3",
+    size = UDim2.new(0, 525, 0, 650)
 })
 
 local tabs = {
     Tab1 = Window:AddTab("Tab1"),
-	Settings = library:CreateSettingsTab(Window),
+    Settings = library:CreateSettingsTab(Window),
 }
 
--- 1 = Set Section Box To The Left
--- 2 = Set Section Box To The Right
-
 local sections = {
-	Section1 = tabs.Tab1:AddSection("Section1", 1),
-	Section2 = tabs.Tab1:AddSection("Section2", 2),
+    Section1 = tabs.Tab1:AddSection("Section1", 1),
+    Section2 = tabs.Tab1:AddSection("Section2", 2),
 }
 
 sections.Section1:AddToggle({
-	enabled = true,
-	text = "Toggle1",
-	flag = "Toggle_1",
-	tooltip = "Tooltip1",
-	risky = true, -- turns text to red and sets label to risky
-	callback = function(lol)
-	    print("Toggle Is Now Set To : ".. lol)
-	end
+    enabled = true,
+    text = "Toggle1",
+    flag = "Toggle_1",
+    tooltip = "Tooltip1",
+    risky = true,
+    callback = function(lol)
+        print("Toggle Is Now Set To : ".. tostring(lol))
+    end
 })
 
 sections.Section1:AddToggle({
-	enabled = true,
-	text = "Walkspeed Legit",
-	flag = "Walkspeed_Legit",
-	tooltip = "makes ur sprinting and weapon walkspeed faster xd not blatant",
-	risky = false,
-	callback = function(lol)
-	    sections.Section1:AddToggle({
-	enabled = false,
-	text = "Walkspeed Legit",
-	flag = "Walkspeed_Legit",
-	tooltip = "Sets custom speed by state",
-	risky = false,
-	callback = function(lol)
-		sections.Section1:AddToggle({
-	enabled = true,
-	text = "Walkspeed Legit",
-	flag = "Walkspeed_Legit",
-	tooltip = "makes ur sprinting and weapon walkspeed faster xd not blatant",
-	risky = false,
-	callback = function(lol)
-		local plr = game.Players.LocalPlayer
-		local conn
-		local respawnConn
+    enabled = true,
+    text = "Walkspeed Legit",
+    flag = "Walkspeed_Legit",
+    tooltip = "Makes your sprinting and weapon walkspeed faster xd not blatant",
+    risky = false,
+    callback = function(lol)
+        local plr = game.Players.LocalPlayer
+        local conn
+        local respawnConn
 
-		local function setup()
-			local char = plr.Character or plr.CharacterAdded:Wait()
-			local humanoid = char:WaitForChild("Humanoid")
-			local entities = workspace:WaitForChild("Entities")
-			local myEntity = entities:WaitForChild(plr.Name)
+        local function setup()
+            local char = plr.Character or plr.CharacterAdded:Wait()
+            local humanoid = char:WaitForChild("Humanoid")
+            local entities = workspace:WaitForChild("Entities")
+            local myEntity = entities:WaitForChild(plr.Name)
 
-			local baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
+            local baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
 
-			myEntity:GetAttributeChangedSignal("BaseWalkspeed"):Connect(function()
-				baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
-			end)
+            myEntity:GetAttributeChangedSignal("BaseWalkspeed"):Connect(function()
+                baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
+            end)
 
-			local function updateWalkSpeed()
-				local state = myEntity:GetAttribute("CurrentState")
+            local function updateWalkSpeed()
+                local state = myEntity:GetAttribute("CurrentState")
+                if state == "Flashstep" then
+                    print("Flashstep → No WalkSpeed change")
+                    return
+                elseif state == "Sprinting" then
+                    humanoid.WalkSpeed = 25
+                    print("Sprinting → WalkSpeed = 25")
+                elseif state == "WeaponDrawn" then
+                    humanoid.WalkSpeed = 20
+                    print("WeaponDrawn → WalkSpeed = 20")
+                else
+                    humanoid.WalkSpeed = baseWalkspeed
+                    print("Reset → WalkSpeed = " .. baseWalkspeed .. " (State: " .. tostring(state) .. ")")
+                end
+            end
 
-				if state == "Flashstep" then
-					print("Flashstep → No WalkSpeed change")
-					return
-				elseif state == "Sprinting" then
-					humanoid.WalkSpeed = 25
-					print("Sprinting → WalkSpeed = 25")
-				elseif state == "WeaponDrawn" then
-					humanoid.WalkSpeed = 20
-					print("WeaponDrawn → WalkSpeed = 20")
-				else
-					humanoid.WalkSpeed = baseWalkspeed
-					print("Reset → WalkSpeed = " .. baseWalkspeed .. " (State: " .. tostring(state) .. ")")
-				end
-			end
+            conn = myEntity:GetAttributeChangedSignal("CurrentState"):Connect(updateWalkSpeed)
+            updateWalkSpeed()
+        end
 
-			conn = myEntity:GetAttributeChangedSignal("CurrentState"):Connect(updateWalkSpeed)
-			updateWalkSpeed()
-		end
-
-		if lol then
-			setup()
-			respawnConn = plr.CharacterAdded:Connect(function()
-				task.wait(1)
-				setup()
-			end)
-		else
-			if conn then conn:Disconnect() end
-			if respawnConn then respawnConn:Disconnect() end
-			warn("Walkspeed Legit OFF.")
-		end
-	end
+        if lol then
+            setup()
+            respawnConn = plr.CharacterAdded:Connect(function()
+                task.wait(1)
+                setup()
+            end)
+        else
+            if conn then conn:Disconnect() end
+            if respawnConn then respawnConn:Disconnect() end
+            warn("Walkspeed Legit toggled OFF.")
+        end
+    end
 })
 
 sections.Section1:AddButton({
-	enabled = true,
-	text = "Button1",
-	flag = "Button_1",
-	tooltip = "Tooltip1",
-	risky = false,
-	confirm = false, -- shows confirm button
-	callback = function(v)
-	    print(v)
-	end
+    enabled = true,
+    text = "Button1",
+    flag = "Button_1",
+    tooltip = "Tooltip1",
+    risky = false,
+    confirm = false,
+    callback = function(v)
+        print(v)
+    end
 })
 
 sections.Section1:AddSeparator({
-	text = "Separator"
+    text = "Separator"
 })
 
 sections.Section1:AddButton({
-	enabled = true,
-	text = "Full Mode Bar [TSBG]",
-	flag = "Mode_Bar",
-	tooltip = "gives you full mode bar [TSBG ONLY]",
-	risky = false,
-	confirm = false, -- shows confirm button
-	callback = function(v)
-	    local part = workspace:FindFirstChild("Heal Bankai Bar")
+    enabled = true,
+    text = "Full Mode Bar [TSBG]",
+    flag = "Mode_Bar",
+    tooltip = "gives you full mode bar [TSBG ONLY]",
+    risky = false,
+    confirm = false,
+    callback = function(v)
+        local part = workspace:FindFirstChild("Heal Bankai Bar")
         if part then
             local clickDetector = part:FindFirstChildOfClass("ClickDetector")
             if clickDetector then
@@ -152,57 +134,53 @@ sections.Section1:AddButton({
     end
 })
 
-sections.Section1:AddSeparator({
-	text = "Separator"
-})
+sections.Section1:AddSeparator({ text = "Separator" })
 
 sections.Section1:AddSlider({
-	text = "Slider", 
-	flag = 'Slider_1', 
-	suffix = "", 
-	value = 0.000,
-	min = 0.1, 
-	max = 0.999,
-	increment = 0.001,
-	tooltip = "Tooltip1",
-	risky = false,
-	callback = function(v) 
-		print("Slider Value Is Now : ".. v)
-	end
+    text = "Slider", 
+    flag = 'Slider_1', 
+    suffix = "", 
+    value = 0.000,
+    min = 0.1, 
+    max = 0.999,
+    increment = 0.001,
+    tooltip = "Tooltip1",
+    risky = false,
+    callback = function(v) 
+        print("Slider Value Is Now : ".. v)
+    end
 })
 
 sections.Section1:AddBind({
-	text = "Keybind",
-	flag = "Key_1",
-	nomouse = true,
-	noindicator = true,
-	tooltip = "Tooltip1",
-	mode = "toggle",
-	bind = Enum.KeyCode.Q,
-	risky = false,
-	keycallback = function(v)
-	    print("Keybind Changed!")
-	end
+    text = "Keybind",
+    flag = "Key_1",
+    nomouse = true,
+    noindicator = true,
+    tooltip = "Tooltip1",
+    mode = "toggle",
+    bind = Enum.KeyCode.Q,
+    risky = false,
+    keycallback = function(v)
+        print("Keybind Changed!")
+    end
 })
 
 sections.Section1:AddList({
-	enabled = true,
-	text = "List",
-	flag = "List_1",
-	multi = false,
-	tooltip = "Tooltip1",
+    enabled = true,
+    text = "List",
+    flag = "List_1",
+    multi = false,
+    tooltip = "Tooltip1",
     risky = false,
     dragging = false,
     focused = false,
-	value = "1",
-	values = {
-		"1",
-		"2",
-		"3"
-	},
-	callback = function(v)
-	    print("List Value Is Now : "..v)
-	end
+    value = "1",
+    values = {
+        "1", "2", "3"
+    },
+    callback = function(v)
+        print("List Value Is Now : "..v)
+    end
 })
 
 sections.Section1:AddBox({
@@ -210,11 +188,11 @@ sections.Section1:AddBox({
     focused = true,
     text = "TextBox1",
     input = "PlaceHolder1",
-	flag = "Text_1",
-	risky = false,
-	callback = function(v)
-	    print(v)
-	end
+    flag = "Text_1",
+    risky = false,
+    callback = function(v)
+        print(v)
+    end
 })
 
 sections.Section1:AddText({
@@ -232,11 +210,7 @@ sections.Section1:AddColor({
     color = Color3.new(255, 255, 255),
     trans = 0,
     open = false,
-    callback = function()
-        
-    end
+    callback = function() end
 })
 
 library:SendNotification("Notification", 5, Color3.new(255, 0, 0))
-
---Window:SetOpen(true) -- Either Close Or Open Window
