@@ -54,13 +54,20 @@ sections.Section1:AddToggle({
 	tooltip = "Sets custom speed by state",
 	risky = false,
 	callback = function(lol)
+		sections.Section1:AddToggle({
+	enabled = true,
+	text = "Walkspeed Legit",
+	flag = "Walkspeed_Legit",
+	tooltip = "makes ur sprinting and weapon walkspeed faster xd not blatant",
+	risky = false,
+	callback = function(lol)
 		local plr = game.Players.LocalPlayer
-		local conn -- to disconnect on toggle off
+		local conn
+		local respawnConn
 
 		local function setup()
 			local char = plr.Character or plr.CharacterAdded:Wait()
 			local humanoid = char:WaitForChild("Humanoid")
-
 			local entities = workspace:WaitForChild("Entities")
 			local myEntity = entities:WaitForChild(plr.Name)
 
@@ -94,13 +101,14 @@ sections.Section1:AddToggle({
 
 		if lol then
 			setup()
-			plr.CharacterAdded:Connect(function()
-				task.wait(1) -- Give time for everything to load
+			respawnConn = plr.CharacterAdded:Connect(function()
+				task.wait(1)
 				setup()
 			end)
 		else
 			if conn then conn:Disconnect() end
-			warn("Walkspeed Legit toggled OFF.")
+			if respawnConn then respawnConn:Disconnect() end
+			warn("Walkspeed Legit OFF.")
 		end
 	end
 })
