@@ -40,6 +40,71 @@ sections.Section1:AddToggle({
 	end
 })
 
+sections.Section1:AddToggle({
+	enabled = true,
+	text = "Walkspeed Legit",
+	flag = "Walkspeed_Legit",
+	tooltip = "makes ur sprinting and weapon walkspeed faster xd not blatant",
+	risky = false,
+	callback = function(lol)
+	    sections.Section1:AddToggle({
+	enabled = false,
+	text = "Walkspeed Legit",
+	flag = "Walkspeed_Legit",
+	tooltip = "Sets custom speed by state",
+	risky = false,
+	callback = function(lol)
+		local plr = game.Players.LocalPlayer
+		local conn -- to disconnect on toggle off
+
+		local function setup()
+			local char = plr.Character or plr.CharacterAdded:Wait()
+			local humanoid = char:WaitForChild("Humanoid")
+
+			local entities = workspace:WaitForChild("Entities")
+			local myEntity = entities:WaitForChild(plr.Name)
+
+			local baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
+
+			myEntity:GetAttributeChangedSignal("BaseWalkspeed"):Connect(function()
+				baseWalkspeed = myEntity:GetAttribute("BaseWalkspeed") or 16
+			end)
+
+			local function updateWalkSpeed()
+				local state = myEntity:GetAttribute("CurrentState")
+
+				if state == "Flashstep" then
+					print("Flashstep → No WalkSpeed change")
+					return
+				elseif state == "Sprinting" then
+					humanoid.WalkSpeed = 25
+					print("Sprinting → WalkSpeed = 25")
+				elseif state == "WeaponDrawn" then
+					humanoid.WalkSpeed = 20
+					print("WeaponDrawn → WalkSpeed = 20")
+				else
+					humanoid.WalkSpeed = baseWalkspeed
+					print("Reset → WalkSpeed = " .. baseWalkspeed .. " (State: " .. tostring(state) .. ")")
+				end
+			end
+
+			conn = myEntity:GetAttributeChangedSignal("CurrentState"):Connect(updateWalkSpeed)
+			updateWalkSpeed()
+		end
+
+		if lol then
+			setup()
+			plr.CharacterAdded:Connect(function()
+				task.wait(1) -- Give time for everything to load
+				setup()
+			end)
+		else
+			if conn then conn:Disconnect() end
+			warn("Walkspeed Legit toggled OFF.")
+		end
+	end
+})
+
 sections.Section1:AddButton({
 	enabled = true,
 	text = "Button1",
