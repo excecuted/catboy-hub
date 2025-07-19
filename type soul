@@ -68,6 +68,12 @@ sections.Section1:AddToggle({
                 elseif state == "Skill" then
                     print("Skill → No WalkSpeed change")
                     return
+                elseif state == "PostureBroken" then
+                    print("Skill → No WalkSpeed change")
+                    return
+                elseif state == "TrueStunned" then
+                    print("Skill → No WalkSpeed change")
+                    return
                 elseif state == "Sprinting" then
                     humanoid.WalkSpeed = 25
                     print("Sprinting → WalkSpeed = 25")
