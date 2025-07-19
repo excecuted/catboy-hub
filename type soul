@@ -74,10 +74,10 @@ sections.Section1:AddToggle({
                 elseif state == "TrueStunned" then
                     print("TrueStunned → No WalkSpeed change")
                     return
-                if state == "ShikaiSkill" then
+                elseif state == "ShikaiSkill" then
                     print("ShikaiSkill → No WalkSpeed change")
                     return
-                if state == "Action" then
+                elseif state == "Action" then
                     print("Action → No WalkSpeed change")
                     return
                 elseif state == "Sprinting" then
