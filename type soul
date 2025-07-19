@@ -69,10 +69,16 @@ sections.Section1:AddToggle({
                     print("Skill → No WalkSpeed change")
                     return
                 elseif state == "PostureBroken" then
-                    print("Skill → No WalkSpeed change")
+                    print("PostureBroken → No WalkSpeed change")
                     return
                 elseif state == "TrueStunned" then
-                    print("Skill → No WalkSpeed change")
+                    print("TrueStunned → No WalkSpeed change")
+                    return
+                if state == "ShikaiSkill" then
+                    print("ShikaiSkill → No WalkSpeed change")
+                    return
+                if state == "Action" then
+                    print("Action → No WalkSpeed change")
                     return
                 elseif state == "Sprinting" then
                     humanoid.WalkSpeed = 25
